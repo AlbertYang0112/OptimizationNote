@@ -676,7 +676,7 @@ c-16-25.333-24-45-24-59z'/></svg></span></span></span></span><span class="vlist-
 </li>
 </ul>
 </li>
-<li>动态种群规模 <em><strong>是不是反了</strong></em>
+<li>动态种群规模
 <ul>
 <li>如果若干代内某粒子没有明显改进，且粒子是邻域中最差的，则删除种群中的粒子</li>
 <li>如果若干代内某粒子有改进，且粒子是邻域中最优的，则复制粒子</li>
@@ -863,7 +863,7 @@ for k in range(K_MAX):
     j = i邻域内随机状态
     if f(i) &lt; f(j) or rand() &lt; exp(-1 * (f(j) - f(i)) / T):
       i = j
-  T = 降温(T)
+  T = 降温函数(T)
 </code></pre>
 </li>
 <li>
@@ -959,7 +959,13 @@ for k in range(K_MAX):
 q = Queue()
 while not 满足停止准则:
   for j in sort(N(i)，按适应度由高到低排序):
-    if j not in q or j 满足渴望水平:
+    if move(i,j) in q and j 满足渴望水平:
+      i = j
+      if move(i,j) == q.peek(): 
+        // 如果本次操作在禁忌表最顶端，把它挪到最底部
+        q.pop()
+        q.push(move(i,j))
+    else if j not in q:
       i = j
       q.pop()
       q.push(move(i,j))
